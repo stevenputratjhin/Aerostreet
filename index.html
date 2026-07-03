@@ -1365,11 +1365,37 @@
   // ===== Copy VA number =====
   document.getElementById("copyVa").addEventListener("click", function(){
     const num = document.getElementById("vaNumber").textContent.replace(/\s/g, "");
-    navigator.clipboard.writeText(num).then(() => {
-      this.textContent = "Tersalin!";
-      this.classList.add("copied");
-      setTimeout(() => { this.textContent = "Salin"; this.classList.remove("copied"); }, 1800);
-    });
+    const btn = this;
+
+    function showCopied(){
+      btn.textContent = "Tersalin!";
+      btn.classList.add("copied");
+      setTimeout(() => { btn.textContent = "Salin"; btn.classList.remove("copied"); }, 1800);
+    }
+
+    function fallbackCopy(text){
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showCopied();
+      } catch (err) {
+        btn.textContent = "Gagal, salin manual";
+        setTimeout(() => { btn.textContent = "Salin"; }, 2000);
+      }
+      document.body.removeChild(ta);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(num).then(showCopied).catch(() => fallbackCopy(num));
+    } else {
+      fallbackCopy(num);
+    }
   });
 
   // ===== QR CODE GENERATOR (visual mockup, seeded pseudo-random module pattern) =====
