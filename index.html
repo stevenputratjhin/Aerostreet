@@ -20,6 +20,7 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
+  [id]{ scroll-margin-top:90px; }
   body{
     background:var(--ink);
     color:var(--bone);
@@ -135,6 +136,12 @@
   .hero-title .outline{
     -webkit-text-stroke: 2px var(--bone);
     color:transparent;
+  }
+  @supports not (-webkit-text-stroke: 2px var(--bone)){
+    .hero-title .outline{
+      color:var(--bone);
+      -webkit-text-stroke:unset;
+    }
   }
   .hero-sub{
     font-size:15px; font-weight:300; color:var(--bone-dim);
@@ -909,4 +916,3 @@
 
 </body>
 </html>
-
